@@ -1,2 +1,22 @@
+# Зависимости и сборка
 node_modules
 dist
+dist-ssr
+
+# macOS
+.DS_Store
+._*
+
+# Логи
+*.log
+npm-debug.log*
+
+# Переменные окружения
+.env
+.env.local
+*.local
+
+# Редакторы
+.vscode/*
+!.vscode/extensions.json
+.idea
