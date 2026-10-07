@@ -12,7 +12,7 @@ export type FetchState<T> = {
 };
 
 /**
- * TODO (задача 1): реализуйте хук загрузки данных.
+ * Задача 1 (сделано): хук загрузки данных.
  *
  * Требования:
  * - запрос уходит при монтировании и при каждой смене url;
@@ -24,11 +24,10 @@ export type FetchState<T> = {
  * - AbortError не показывается пользователю как ошибка;
  * - refetch() повторяет запрос по тому же url.
  *
- * Подсказка для refetch: заведите в хуке счётчик попыток
- * и добавьте его в зависимости useEffect.
+ * refetch() увеличивает счётчик попыток retryCount; он стоит в зависимостях
+ * useEffect, поэтому эффект перезапускается и запрос уходит заново.
  */
 export function useFetch<T>(url: string): FetchState<T> {
-  // Заглушка, чтобы проект собирался. Замените её своей реализацией.
 
   const [data, setData] = useState<T | null>(null)
   const [isLoading, setIsLoading] = useState(true)
