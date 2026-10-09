@@ -6,7 +6,7 @@ type AuthorBadgeProps = {
   userId: number;
 };
 
-// Компонент готов. Он начнёт работать, когда вы реализуете useFetch.
+// Автор поста; у блока свои состояния загрузки и ошибки, они не влияют на пост
 export function AuthorBadge({ userId }: AuthorBadgeProps) {
   const { data: user, isLoading, error } = useFetch<User>(endpoints.user(userId));
 

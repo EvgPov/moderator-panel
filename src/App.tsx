@@ -3,9 +3,8 @@ import { Navigate, Route, Routes, Outlet } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Loader } from './components/Loader';
 
-// Задача 7 (сделано): страницы загружаются лениво через React.lazy,
-// каждая попадает в отдельный чанк. Suspense стоит внутри Layout-маршрута,
-// поэтому при загрузке страницы шапка с навигацией не пропадает.
+// Страницы загружаются лениво (React.lazy): код каждой собирается в отдельный
+// чанк и скачивается при первом переходе на неё.
 
 const PostsPage = lazy(() => import('./pages/PostsPage'));
 const PostPage = lazy(() => import('./pages/PostPage'));
@@ -17,6 +16,9 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
+        {/* Маршрут без path оборачивает страницы в Suspense ниже Layout:
+            пока грузится код страницы, индикатор заменяет только её,
+            а шапка с навигацией остаётся на месте. */}
         <Route
           element={
             <Suspense fallback={<Loader text="Загрузка страницы..." />}>

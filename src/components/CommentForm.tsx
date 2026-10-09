@@ -13,22 +13,17 @@ export function CommentForm({ postId, onCreated }: CommentFormProps) {
   const [email, setEmail] = useState('');
   const [body, setBody] = useState('');
 
-  // Задача 5.1 (сделано): подключен useMutation<Comment> для POST-запроса
-  // на endpoints.comments. isLoading, error, execute взяты из хука.
-
+  // POST-запрос на создание комментария
   const { isLoading, error, execute } = useMutation<Comment>(endpoints.comments)
   
   const isValid = name.trim() !== '' && email.trim() !== '' && body.trim() !== '';
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    // Задача 5.2 (сделано):
-    // 1. отправка { postId, name, email, body } через execute;
-    // 2. если сервер вернул комментарий -- передаётся в onCreated
-    //    и очищаются поля формы;
-    // 3. если вернулся null -- поля не очищаются, ошибку показывает разметка ниже.
     event.preventDefault();
     const created = await execute({ postId, name, email, body });
 
+    // execute возвращает null при ошибке: тогда поля не очищаются,
+    // а текст ошибки выводится под формой
     if (created) {
       onCreated(created)
       setName('')

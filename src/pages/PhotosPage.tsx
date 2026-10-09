@@ -8,9 +8,8 @@ import { simulateHeavyRender } from '../utils/simulateHeavyRender';
 import { useDebounce } from '../hooks/useDebounce';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
-// Задача 6 (сделано): оптимизация медиатеки.
-// Исправлено пять проблем производительности, подробности в OPTIMIZATION.md.
-// Логика и внешний вид страницы не изменились.
+// Медиатека на 5000 записей. Разбор оптимизаций (memo, useCallback, useMemo,
+// вынос таймера, debounce поиска, виртуализация) — в OPTIMIZATION.md.
 
 const ALBUM_IDS = Array.from({ length: 100 }, (_, i) => i + 1);
 
@@ -44,10 +43,10 @@ const PhotoRow = memo(function PhotoRow({
 type SecondsOnPageProps = {
   openedAt: number;
 }
-// Таймер вынесен в отдельный компонент: его state меняется каждую секунду,
-// и теперь при тике перерисовывается только этот абзац, а не вся PhotosPage
-// со списком. Секунды считаются от момента открытия страницы (openedAt),
-// поэтому значение точное и совпадает с исходной логикой.
+// Таймер в отдельном компоненте: его state меняется каждую секунду,
+// и при тике перерисовывается только этот абзац, а не вся страница со списком.
+// Секунды считаются от момента открытия страницы (openedAt), поэтому значение
+// точное, даже если setInterval срабатывает с задержкой.
 function SecondsOnPage({openedAt}: SecondsOnPageProps) {
   const [secondsOnPage, setSecondsOnPage] = useState(
     () => Math.floor((Date.now() - openedAt) / 1000)

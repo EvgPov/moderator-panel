@@ -12,22 +12,11 @@ import { CommentList } from '../components/CommentList';
 import { CommentForm } from '../components/CommentForm';
 
 /**
- * Задача 4 (сделано): страница поста.
+ * Страница поста: пост, автор, комментарии и форма нового комментария.
  *
- * 1. Загрузите пост: useFetch<Post>(endpoints.post(postId)).
- * 2. Загрузите комментарии: useFetch<Comment[]>(endpoints.postComments(postId)).
- * 3. Обработайте состояния поста:
- *    - загрузка -- Loader;
- *    - статус 404 -- сообщение «Пост не найден» и ссылка на /posts
- *      (проверьте на адресе /posts/9999);
- *    - любая другая ошибка -- ErrorMessage с кнопкой «Повторить».
- * 4. Покажите заголовок и текст поста, под ними -- <AuthorBadge userId={post.userId} />.
- * 5. Покажите комментарии через CommentList (со своими состояниями загрузки и ошибки).
- * 6. Под списком -- CommentForm. Новый комментарий храните в локальном state
- *    и выводите вместе с загруженными.
- *
- * Подсказка: jsonplaceholder не сохраняет данные и всегда возвращает id: 501.
- * Чтобы key не повторялся, перед добавлением замените id, например на Date.now().
+ * Пост — основное содержимое: его загрузка, 404 и ошибка заменяют всю страницу.
+ * У комментариев свои состояния загрузки и ошибки, они не скрывают пост.
+ * Новые комментарии хранятся в локальном state и выводятся вместе с загруженными.
  */
 export default function PostPage() {
   const { postId = '' } = useParams();
@@ -42,6 +31,8 @@ export default function PostPage() {
   const {data: comments, isLoading: isLoadingComments, 
         error: errorComments, refetch: refetchComments } = useFetch<Comment[]>(urlComments)
 
+  // 404 проверяется раньше общей ошибки: error заполнен при любой ошибке,
+  // а повторять запрос несуществующего поста бессмысленно
   if (isLoadingPost) return <Loader/>;
   if (statusPost === 404){
     return (
@@ -57,6 +48,8 @@ export default function PostPage() {
 
   const allComments = [...(comments ?? []), ...newComments]
 
+  // JSONPlaceholder не сохраняет данные и всегда возвращает id: 501,
+  // поэтому id заменяется, чтобы key в списке не повторялся
   function handleCreated(comment: Comment) {
     setNewComments(prev => [...prev, { ...comment, id: Date.now() }])
   }

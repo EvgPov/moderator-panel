@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 /**
- * Задача 2 (сделано): хук debounce.
+ * Отложенное значение (debounce).
  *
- * Хук возвращает value, но обновляет его только тогда,
+ * Возвращает value, но обновляет его только тогда,
  * когда исходное значение не менялось delay миллисекунд.
- * Таймер очищается в функции очистки useEffect.
  */
 export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -15,8 +14,8 @@ export function useDebounce<T>(value: T, delay: number): T {
       setDebouncedValue(value);
     }, delay);
 
-    // При смене value React вызовет эту функцию перед новым запуском эффекта,
-    // и старый таймер не сработает
+    // React вызовет эту функцию перед новым запуском эффекта (смена value или delay)
+    // и при размонтировании компонента, поэтому старый таймер не сработает
     return () => clearTimeout(timer);
   }, [value, delay]);
 

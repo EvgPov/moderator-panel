@@ -12,7 +12,8 @@ type MutationState<T> = {
   execute: (body?: unknown) => Promise<T | null>;
 };
 
-// Хук готов, его менять не нужно.
+// Хук для запросов по действию пользователя (POST, PUT, PATCH, DELETE):
+// запрос уходит только при вызове execute().
 export function useMutation<T>(
   url: string,
   options: MutationOptions = {}
