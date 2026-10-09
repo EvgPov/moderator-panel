@@ -57,9 +57,13 @@ export function useFetch<T>(url: string): FetchState<T> {
           const result: T = await response.json();
           setData(result)
         }  
-      } catch(err) {
-        if (err instanceof Error && err.name !== 'AbortError') {
-          setError(err.message)
+      } catch (err) {
+        if (err instanceof HttpError) {
+          // сервер ответил, но с кодом 4xx/5xx
+          setError(err.message);
+        } else if (err instanceof Error && err.name !== 'AbortError') {
+          // ответа не было: нет сети, сервер недоступен
+          setError('Нет соединения с сервером');
         }
       } finally {
         if (!controller.signal.aborted) {
